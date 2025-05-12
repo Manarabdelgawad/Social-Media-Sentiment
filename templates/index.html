@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis - Review Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #323241, #65659f);
+            color: #d1d1d1;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            background: rgba(38, 38, 57, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #a3bffa;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(46, 46, 79, 0.7);
+            border: 1px solid rgba(163, 191, 250, 0.2);
+            border-radius: 8px;
+            color: #f0f0f0;
+            outline: none;
+            resize: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .form-group textarea:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
+        }
+        .form-group textarea::placeholder {
+            color: rgba(163, 191, 250, 0.6);
+        }
+        button {
+            background: linear-gradient(90deg, #4a90e2, #63b3ed);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.5);
+            transition: all 0.3s;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        button:hover {
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.7);
+            transform: translateY(-2px);
+            background: linear-gradient(90deg, #4a90e2, #5aa1e8);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(46, 46, 79, 0.7);
+            border-radius: 8px;
+            color: #f0f0f0;
+            font-size: 1rem;
+            border: 1px solid rgba(163, 191, 250, 0.1);
+            min-height: 80px;
+        }
+       .hero-img {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 20px;
+        filter: 
+        drop-shadow(0 10px 15px rgba(74, 104, 137, 0.6))
+        drop-shadow(0 20px 30px rgba(74, 144, 226, 0.4))
+        drop-shadow(0 30px 45px rgba(74, 144, 226, 0.2));
+        transition: filter 0.3s ease;
+        }  
+
+       .hero-img:hover {
+         filter: 
+        drop-shadow(0 15px 20px rgba(74, 144, 226, 0.7))
+        drop-shadow(0 25px 35px rgba(125, 146, 170, 0.5))
+        drop-shadow(0 35px 50px rgba(74, 144, 226, 0.3));
+        }
+        .title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #4a90e2, #63b3ed);
+            border-radius: 3px;
+        }
+        .confidence-bar {
+            height: 8px;
+            background: rgba(46, 46, 79, 0.7);
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .confidence-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #4a90e2, #63b3ed);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="card animate__animated animate__fadeIn">
+      <img src="{{ url_for('static', filename='images/web.jpg') }}" alt="Sentiment Analysis" class="hero-img">
+        <h1 class="title text-3xl font-bold text-white">Social Media Sentiment Analyzer</h1>
+        <p class="text-gray-300 mb-6">Discover the emotional tone behind any text with AI-powered analysis</p>
+        
+        <div class="form-group">
+            <label for="review">Enter Your Text:</label>
+            <textarea id="review" rows="5" placeholder="Type your social media post, review, or comment here (e.g., 'This product changed my life!')"></textarea>
+        </div>
+        
+        <button onclick="predictSentiment()" class="animate__animated animate__pulse animate__infinite animate__slower">
+            Analyze Sentiment
+        </button>
+        
+        <div class="form-group">
+            <label>Analysis Result:</label>
+            <div id="result">
+                <p class="text-gray-400 italic">Your sentiment analysis will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function predictSentiment() {
+            const review = document.getElementById('review').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            resultDiv.classList.remove('animate__pulse');
+
+            if (!review.trim()) {
+                resultDiv.innerHTML = '<p class="text-red-400 animate__animated animate__headShake"><i class="mr-2">⚠️</i> Please enter some text to analyze</p>';
+                resultDiv.classList.add('animate__animated', 'animate__headShake');
+                return;
+            }
+
+            resultDiv.innerHTML = `
+                <div class="flex items-center justify-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-yellow-400">Analyzing sentiment...</span>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ review }),
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<p class="text-red-400 animate__animated animate__headShake"><i class="mr-2">❌</i> Error: ${data.error}</p>`;
+                    resultDiv.classList.add('animate__animated', 'animate__headShake');
+                    return;
+                }
+
+                const sentimentClass = data.sentiment === 'Positive' ? 
+                    'text-green-400' : data.sentiment === 'Negative' ? 
+                    'text-red-400' : 'text-yellow-400';
+                
+                const sentimentEmoji = data.sentiment === 'Positive' ? 
+                    '😊' : data.sentiment === 'Negative' ? 
+                    '😞' : '😐';
+
+                resultDiv.innerHTML = `
+                    <div class="animate__animated animate__fadeIn">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-2">${sentimentEmoji}</span>
+                            <span class="font-bold ${sentimentClass} text-xl">${data.sentiment} Sentiment</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="font-semibold">Confidence:</span> ${(data.confidence * 100).toFixed(2)}%
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${data.confidence * 100}%"></div>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-300">Analysis completed at ${new Date().toLocaleTimeString()}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="text-red-400 animate__animated animate__headShake">
+                        <i class="mr-2">❌</i> Error analyzing sentiment. Please try again.
+                    </p>
+                `;
+                resultDiv.classList.add('animate__animated', 'animate__headShake');
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
