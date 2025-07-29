@@ -1,4 +1,8 @@
 # Social-Media-Sentiment
+<div align="center">
+  <img height="250" src="https://drive.google.com/file/d/15QQknbTNNpX2rBtila1cTtxy0zhZ9TZO/view?usp=sharing"/>
+</div>
+
 Overview
 
 This project analyzes sentiment in social media posts (tweets) using machine learning. It classifies text as either Positive or Negative sentiment,
