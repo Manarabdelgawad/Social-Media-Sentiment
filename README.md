@@ -1,6 +1,7 @@
 # Social-Media-Sentiment
 
-<img width="1912" height="922" alt="web_home" src="https://github.com/user-attachments/assets/91466264-acdf-4ce2-b1c5-8434f6303d3a" />
+<img width="1200" height="622" alt="web_home" src="https://github.com/user-attachments/assets/91466264-acdf-4ce2-b1c5-8434f6303d3a" />
+
 
 Overview
 
