@@ -1,7 +1,6 @@
 # Social-Media-Sentiment
-<div align="center">
-  <img height="250" src="https://drive.google.com/file/d/15QQknbTNNpX2rBtila1cTtxy0zhZ9TZO/view?usp=sharing"/>
-</div>
+
+<img width="1912" height="922" alt="web_home" src="https://github.com/user-attachments/assets/91466264-acdf-4ce2-b1c5-8434f6303d3a" />
 
 Overview
 
